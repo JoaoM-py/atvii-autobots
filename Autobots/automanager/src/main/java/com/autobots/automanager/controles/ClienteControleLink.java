@@ -14,10 +14,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.autobots.automanager.entidades.Cliente;
+import com.autobots.automanager.entidades.Documento;
+import com.autobots.automanager.entidades.Endereco;
+import com.autobots.automanager.entidades.Telefone;
 import com.autobots.automanager.modelo.AdicionadorLinkCliente;
+import com.autobots.automanager.modelo.AdicionadorLinkDocumento;
+import com.autobots.automanager.modelo.AdicionadorLinkEndereco;
+import com.autobots.automanager.modelo.AdicionadorLinkTelefone;
 import com.autobots.automanager.modelo.ClienteAtualizador;
 import com.autobots.automanager.modelo.ClienteSelecionador;
 import com.autobots.automanager.repositorios.ClienteRepositorio;
+import com.autobots.automanager.repositorios.DocumentoRepositorio;
+import com.autobots.automanager.repositorios.EnderecoRepositorio;
+import com.autobots.automanager.repositorios.TelefoneRepositorio;
 
 @RestController
 public class ClienteControleLink {
@@ -27,6 +36,18 @@ public class ClienteControleLink {
 	private ClienteSelecionador selecionador;
 	@Autowired
 	private AdicionadorLinkCliente adicionadorLink;
+	@Autowired
+	private AdicionadorLinkEndereco adicionadorLinkEndereco;
+    @Autowired
+    private EnderecoRepositorio repositorioEndereco;
+    @Autowired
+    private TelefoneRepositorio repositorioTelefone;
+	@Autowired
+	private AdicionadorLinkTelefone adicionadorLinkTelefone;
+    @Autowired
+    private DocumentoRepositorio repositorioDocumento;
+	@Autowired
+	private AdicionadorLinkDocumento adicionadorLinkDocumento;
 
 	@GetMapping("/cliente/{id}")
 	public ResponseEntity<Cliente> obterCliente(@PathVariable long id) {
@@ -45,10 +66,16 @@ public class ClienteControleLink {
 	@GetMapping("/clientes")
 	public ResponseEntity<List<Cliente>> obterClientes() {
 		List<Cliente> clientes = repositorio.findAll();
+		List<Endereco> enderecos = repositorioEndereco.findAll();
+		List<Telefone> telefones = repositorioTelefone.findAll();
+		List<Documento> documentos = repositorioDocumento.findAll();
 		if (clientes.isEmpty()) {
 			ResponseEntity<List<Cliente>> resposta = new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			return resposta;
 		} else {
+			adicionadorLinkTelefone.adicionarLink(telefones);
+			adicionadorLinkDocumento.adicionarLink(documentos);
+			adicionadorLinkEndereco.adicionarLink(enderecos);	
 			adicionadorLink.adicionarLink(clientes);
 			ResponseEntity<List<Cliente>> resposta = new ResponseEntity<>(clientes, HttpStatus.FOUND);
 			return resposta;
