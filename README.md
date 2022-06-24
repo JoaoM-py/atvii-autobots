@@ -18,4 +18,4 @@ Aplicando níveis de maturidade ao criar estrutura HATEOAS
 | :open_file_folder: src/main/ .../ repositorios             | Arquivo para utilização do JPA nas entidades do projeto         |
 | :page_facing_up: src/main/ .../ AutoanagerApplication.java | Arquivo principal do projeto                                    |
 | :open_file_folder: src/main/ resources/                    | Arquivos para configurações globais do projeto                  |
-| :page_facing_up: pom.xml                                   | Arquivo usado gerenciar as dependencias do projeto              |
+| :page_facing_up: pom.xml                                   | Arquivo usado para gerenciar as dependencias do projeto         |
